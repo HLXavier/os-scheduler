@@ -1,0 +1,15 @@
+Instruções:
+
+    - os arquivos teste devem ficar dentro 
+    da pasta "cases", no root do projeto
+
+    - não deixe linhas em branco nos casos
+    de teste
+
+    - as operações (IN, OUT) devem ser escritas
+    em maiúsculo
+
+    - os comandos tem o seguinte formato:
+    IN(<pid>, <tanho>)
+    ou
+    OUT(<pid>)
