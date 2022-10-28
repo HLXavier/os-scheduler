@@ -1,4 +1,4 @@
-def convert_line(line):
+def read_line(line):
     command = line.replace(" ", "").replace("(", " ").replace(")", " ").replace(",", " ")
 
     if len(command.split()) > 2:
@@ -9,6 +9,6 @@ def convert_line(line):
     return op, pid
 
 
-def convert_file(file):
+def read_file(file):
     case = open(f'cases/{file}', 'r')
-    return [convert_line(line) for line in case]
+    return [read_line(line) for line in case]

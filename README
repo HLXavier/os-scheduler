@@ -1,3 +1,11 @@
+Integrantes:
+
+    - Fernanda Rosa
+    - Henrique Xavier
+    - Lucas Antunes
+    - Vinicius Saliba
+
+
 Instruções:
 
     - os arquivos teste devem ficar dentro 
@@ -13,3 +21,18 @@ Instruções:
     IN(<pid>, <tanho>)
     ou
     OUT(<pid>)
+
+
+Para rodar:
+
+    $ python3 main.py <arquivo> <espaço> <fit>
+
+    exemplo:
+    python3 main.py case1 16 ff
+
+    fits:
+        ff -> first-fit
+        bf -> best-fit
+        wf -> worst-fit
+        cf -> circular-fit
+    
