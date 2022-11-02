@@ -12,6 +12,7 @@ class Manager:
     def __init__(self, space):
         self.space = space
         self.memory = [(None, space)]
+        self.last = 0
         self.fits = {
             FIRST_FIT: self.first_fit,
             BEST_FIT: self.best_fit,
@@ -39,12 +40,15 @@ class Manager:
                 self.remove(command[1])
                 str_command = f'{command[0]}({command[1]})'
 
-            str_memory = ' | '.join([f'{pid}:{size}' for pid, size in self.memory])
+            str_memory = ' | '.join([f'{size}({pid})' for pid, size in self.memory])
             print(f'{str_command:<10} | {str_memory} |')
+            print(f'last: {self.last}')
+            print('-' * 20)
 
 
     def add(self, pid, size, pos):
         _, free = self.memory[pos]
+        self.last = pos
 
         if free > size:
             self.memory.insert(pos, (pid, size))
@@ -56,11 +60,10 @@ class Manager:
     
     def compact(self, pos1, pos2):
         _, size1 = self.memory[pos1]
-        pid2, size2 = self.memory[pos2]
+        _, size2 = self.memory[pos2]
 
-        if pid2 == None:
-            self.memory[pos1] = (None, size1 + size2)
-            self.memory.pop(pos2)
+        self.memory[pos1] = (None, size1 + size2)
+        self.memory.pop(pos2)
 
 
     def remove(self, pid):
@@ -69,15 +72,21 @@ class Manager:
 
             if mem_pid == pid:
                 self.memory[pos] = (None, mem_size)
+                self.last = pos
 
                 next = pos + 1
                 prev = pos - 1
 
                 if next < len(self.memory):
-                    self.compact(pos, next)
+                    pid_next, _ = self.memory[next]
+                    if pid_next == None:
+                        self.compact(pos, next)
                 
                 if prev >= 0:
-                    self.compact(pos, prev)
+                    pid_prev, _ = self.memory[prev]
+                    if pid_prev == None:
+                        self.compact(pos, prev)
+                        self.last -= 1
 
                 return
         
