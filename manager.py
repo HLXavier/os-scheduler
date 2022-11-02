@@ -1,3 +1,6 @@
+from logger import Logger
+
+
 IN = 'IN'
 OUT = 'OUT'
 
@@ -9,16 +12,21 @@ CIRCULAR_FIT = 'cf'
 
 class Manager:
 
-    def __init__(self, space):
+    def __init__(self, space, log_strategy):
         self.space = space
         self.memory = [(None, space)]
-        self.last = 0
+
         self.fits = {
             FIRST_FIT: self.first_fit,
             BEST_FIT: self.best_fit,
             WORST_FIT: self.worst_fit,
             CIRCULAR_FIT: self.circular_fit
         }
+
+        self.last = 0
+        self.margin = 0
+
+        self.logger = Logger(log_strategy)
     
 
     def simulate(self, commands, fit):
@@ -33,17 +41,11 @@ class Manager:
                     self.add(pid, size, pos)
                 else:
                     print("ESPAÇO INSUFICIENTE DE MEMÓRIA")
-
-                str_command = f'{command[0]}({pid}, {size})'
             
             if command[0] == OUT:
                 self.remove(command[1])
-                str_command = f'{command[0]}({command[1]})'
-
-            str_memory = ' | '.join([f'{size}({pid})' for pid, size in self.memory])
-            print(f'{str_command:<10} | {str_memory} |')
-            print(f'last: {self.last}')
-            print('-' * 20)
+            
+            self.logger.log(command, self.memory, self.space)
 
 
     def add(self, pid, size, pos):
@@ -78,13 +80,14 @@ class Manager:
                 prev = pos - 1
 
                 if next < len(self.memory):
-                    pid_next, _ = self.memory[next]
-                    if pid_next == None:
+                    next_pid, next_size = self.memory[next]
+                    if next_pid == None:
                         self.compact(pos, next)
+                        self.margin = next_size
                 
                 if prev >= 0:
-                    pid_prev, _ = self.memory[prev]
-                    if pid_prev == None:
+                    prev_pid, _ = self.memory[prev]
+                    if prev_pid == None:
                         self.compact(pos, prev)
                         self.last -= 1
 
@@ -132,4 +135,20 @@ class Manager:
 
 
     def circular_fit(self, size):
-        return
+        margin = self.margin
+        self.margin = 0
+
+        if margin >= size:
+            _, mem_size  = self.memory[self.last]
+            self.memory.insert(self.last, (None, mem_size - margin))
+            self.memory[self.last+1] = (None, margin)
+            return self.last+1
+
+        start = self.last + 1
+        for pos in range(start, start + len(self.memory)):
+
+            cur_pid, cur_size = self.memory[pos % len(self.memory)]
+            if cur_pid == None and cur_size >= size:
+                return pos % len(self.memory)
+        
+        return None
