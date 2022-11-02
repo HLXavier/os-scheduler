@@ -8,6 +8,8 @@ Integrantes:
 
 Instruções:
 
+    --- Python 3.8.10 ---
+
     - os arquivos teste devem ficar dentro 
     da pasta "cases", no root do projeto
 
@@ -25,10 +27,16 @@ Instruções:
 
 Para rodar:
 
-    $ python3 main.py <arquivo> <espaço> <fit>
+    $ python3 main.py <arquivo> <espaço> <fit> 
 
-    exemplo:
-    python3 main.py case1 16 ff
+    ou (opcional, com descrição completa da memória)
+
+    $ python3 main.py <arquivo> <espaço> <fit> verbose    
+
+    exemplos:
+    $ python3 main.py case1 16 ff
+    $ python3 main.py case2 32 cf verbose
+
 
     fits:
         ff -> first-fit
