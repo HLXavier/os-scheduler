@@ -1,8 +1,6 @@
 EMPTY = 'empty'
 VERBOSE = 'verbose'
 
-STRATEGIES = [EMPTY, VERBOSE]
-
 
 class Logger:
 
