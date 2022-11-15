@@ -20,7 +20,7 @@ Instruções:
     em maiúsculo
 
     - os comandos tem o seguinte formato:
-    IN(<pid>, <tanho>)
+    IN(<pid>, <tamanho>)
     ou
     OUT(<pid>)
 
